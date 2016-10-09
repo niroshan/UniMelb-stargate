@@ -1,0 +1,128 @@
+Installation instructions
+
+based on instructions sent by Till Christian Siering
+till@munin.in-berlin.de
+
+
+ Step What to do
+ 1.   Go to the base source directory
+
+       cd /usr/src
+
+ 2.   Copy the Linux-Kernel sources to this directory
+
+       cp where_ever_it_is/linux-2_0_XX_tar.gz
+
+ 3.   Copy the rt-linux sources to this directory
+
+       cp where_ever_it_is/rtlinux-0.V-2.0.XX.tgz
+
+ 4.   Remove the linux Directory
+
+       rm linux
+
+ 5.   Install the Linux-Kernel sources
+
+       tar -xzvf linux-2_0_XX_tar.gz
+       ln -s linux-2.0.XX linux
+
+ 6.   Install the rt-linux sources
+
+       tar -xzvf rtlinux-0.V-2.0.XX.tgz
+
+ 7.   Go to the base linux source directory
+
+      cd /usr/src/linux
+
+ 8.   Apply the rtlinux patch by following the instructions in the README
+      file of the rtlinux-0.V-2.0.XX.tgz, the following shows a sample
+      patch command
+
+       patch -p1 < wherever_it_is/kernel_patch
+
+ 9.   Configure Linux by running
+
+       make config  OR  make menuconfig  OR  make xconfig
+
+ 10.  Create the dependencies and clean up
+
+       make dep; make clean
+
+ 11.  Build the kernel and watch, whether -D__RT__ is defined as an
+      Compiler Flag
+
+       make zImage
+
+ 12.  Build the modules
+
+       make modules
+
+ 13.  Install the modules
+
+       make modules_install
+
+ 14.  Go to the directory, where boot information is stored (/boot on
+      RedHat - this differs between different distributions)
+
+       cd /boot
+
+ 15.  Copy the kernel image to this directory
+
+       cp /usr/src/linux/arch/i386/boot/zImage
+
+ 16.  Configure your Bootloader (assuming you use lilo)
+
+       cd /etc
+       vi lilo.conf
+       ...
+
+      The following example is my lilo.conf file:
+
+       boot=/dev/hda
+       map=/boot/map
+       install=/boot/boot.b
+       prompt
+       timeout=50
+       image=/boot/zImage
+           label=rtlinux-0.6
+           root=/dev/hda2
+           read-only
+       image=/boot/vmlinuz
+           label=linux
+           root=/dev/hda2
+           read-only
+
+ 17.  Install the new kernel
+
+       /sbin/lilo
+
+ 18.  Reboot
+
+       /sbin/reboot
+
+ 19.  Check, whether the rt-linux symbols are in the kernel
+
+       /sbin/ksyms -a | grep " "rt_ | wc -l
+
+ 20.  Go to the 2task examples
+
+       cd /usr/src/rtlinux-0.V-2.0.XX/testing/2tasks
+
+ 21.  Read the README file and create the special files for the
+      rt_fifo_new communication mechanism.
+
+ 22.  Compile the example
+
+       make
+
+ 23.  Insert the 2tasks example, rt_fifo_new and the rt_prio_sched
+
+       /sbin/insmod /lib/modules/2.0.XX/fs/rt_fifo_new.o
+       /sbin/insmod /lib/modules/2.0.XX/misc/rt_prio_sched.o
+       /sbin/insmod ./rt_process.o
+
+ 24.  Run the user-space process
+
+       ./app
+
+Hopefully everything works!

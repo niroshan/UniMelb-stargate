@@ -1,0 +1,35 @@
+all: rt_process.o app
+
+# you might have to change this
+
+# the path to the rt-linux kernel 
+RTLINUX = ../../../linux
+INCLUDE = ${RTLINUX}/include
+
+CFLAGS = -O2 -Wall
+
+OBJ=\
+         error.o\
+         iohw.o\
+         packet.o\
+         plc.o\
+         poscon.o\
+         sat_data.o\
+         sat_track.o\
+         startrak.o\
+         serial.o\
+         user.o\
+         utilities.o
+
+
+app: app.c 
+	gcc -I${INCLUDE} ${CFLAGS} -o app app.c 
+
+rt_process.o: rt_process.c seq.o
+	gcc -I$(INCLUDE) $(CFLAGS) -D__KERNEL__ -D__RT__  -c rt_process.c seq.o
+
+seq.o: seq.c $(OBJ)
+	gcc -c seq.c $(OBJ)
+	
+clean:
+	rm -f app *.o

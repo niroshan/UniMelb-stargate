@@ -1,0 +1,5 @@
+#!/bin/sh
+make
+setserial /dev/ttyS3 port 0x0340 irq 3 port 8250
+setserial /dev/ttyS3 port 0x0340 irq 3 uart 16450
+./sequ

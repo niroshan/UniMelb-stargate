@@ -1,0 +1,16 @@
+rm -f app *.o
+cc -O2 -Wall -g  -D__KERNEL__ -D__RT__   -c error.c -o error.o
+cc -O2 -Wall -g  -D__KERNEL__ -D__RT__   -c iohw.c -o iohw.o
+cc -O2 -Wall -g  -D__KERNEL__ -D__RT__   -c packet.c -o packet.o
+cc -O2 -Wall -g  -D__KERNEL__ -D__RT__   -c plc.c -o plc.o
+cc -O2 -Wall -g  -D__KERNEL__ -D__RT__   -c poscon.c -o poscon.o
+cc -O2 -Wall -g  -D__KERNEL__ -D__RT__   -c sat_data.c -o sat_data.o
+cc -O2 -Wall -g  -D__KERNEL__ -D__RT__   -c sat_track.c -o sat_track.o
+cc -O2 -Wall -g  -D__KERNEL__ -D__RT__   -c startrak.c -o startrak.o
+cc -O2 -Wall -g  -D__KERNEL__ -D__RT__   -c serial.c -o serial.o
+cc -O2 -Wall -g  -D__KERNEL__ -D__RT__   -c user.c -o user.o
+cc -O2 -Wall -g  -D__KERNEL__ -D__RT__   -c utilities.c -o utilities.o
+gcc  -O2 -Wall -g  -D__KERNEL__ -D__RT__ -c seq.c 
+gcc -I/usr/src/linux/include -O2 -Wall -g  -D__KERNEL__ -D__RT__  -c rt_process.c 
+./error.o: couldn't find the kernel version the module was compiled for
+gcc -I/usr/src/linux/include -O2 -Wall  -o app app.c 
